@@ -1,0 +1,159 @@
+/* AnimatedCounter.css - Versión Cuadrada */
+.counter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 11.2px;
+  width: 120px; /* Tamaño fijo para el cuadrado */
+  height: 90px !important; /* Local scoped */
+  aspect-ratio: 1/1; /* Garantiza relación 1:1 */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeInUp 0.6s forwards var(--delay);
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box; /* Incluye padding en el tamaño total */
+  margin-bottom: 10px;
+  
+  /* Fondo metálico estático */
+  background: linear-gradient(
+      135deg, 
+      rgba(200, 200, 200, 0.15) 0%, 
+      rgba(240, 240, 240, 0.25) 20%, 
+      rgba(200, 200, 200, 0.15) 40%,
+      rgba(240, 240, 240, 0.25) 60%,
+      rgba(200, 200, 200, 0.15) 80%,
+      rgba(240, 240, 240, 0.25) 100%
+  );
+  
+  /* Sombras estáticas */
+  box-shadow: 
+      0 3.2px 24px rgba(0, 0, 0, 0.25),
+      inset 0 0 16px rgba(255, 255, 255, 0.1),
+      inset 0 0 24px rgba(255, 255, 255, 0.05);
+}
+
+/* Contador mejorado */
+.counter-value {
+  font-size: 2.2rem; /* Reducido para caber mejor */
+  font-weight: 700;
+  font-family: 'TWK Everett', sans-serif;
+  background: linear-gradient(135deg, 
+      #67e8f9 0%, 
+      #ffffff 25%, 
+      #6ee7b7 50%, 
+      #ffffff 75%, 
+      #67e8f9 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+  text-shadow: 0 0 8px rgba(103, 232, 249, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+/* Etiqueta */
+.counter-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter Tight', sans-serif;
+  text-align: center;
+  width: 100%;
+  font-size: 0.7rem; /* Reducido para caber mejor */
+  color: rgba(219, 234, 254, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 500;
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Nombre del país (destacado) */
+.country-name {
+  font-size: 1.1rem; /* Aumentado de 0.7rem (≈43% más grande) */
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.8px; /* Más espaciado */
+  line-height: 1.2; /* Mejor interlineado */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  padding: 0 2px;
+  margin-top: 0.2rem; /* Espacio ajustado */
+}
+
+/* Animaciones (se mantienen iguales) */
+@keyframes fadeInUp {
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* MOBILE FIX counters (evita superposición) */
+@media (max-width: 768px) {
+  .additional-counters-grid {
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .additional-counter-item {
+    flex: 0 1 calc(50% - 1rem); /* 2 por fila */
+    max-width: calc(50% - 1rem);
+    width: calc(50% - 1rem);
+  }
+
+  /* achicar un poco el contador */
+  .counter-item {
+    width: 100px;
+    height: 100px;
+  }
+
+  .counter-value {
+    font-size: 1.8rem;
+  }
+
+  .country-name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    
+    font-size: 0.8rem;
+    line-height: 1.2;
+    text-align: center;
+    word-break: break-word;
+  }
+}
+
+/* MOBILE CHICO (tipo 400px) */
+@media (max-width: 480px) {
+  .additional-counter-item {
+    flex: 0 1 100%; /* 1 por fila */
+    max-width: 100%;
+  }
+
+  .counter-item {
+    width: 90px;
+    height: 90px;
+  }
+}
