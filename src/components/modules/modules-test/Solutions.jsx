@@ -130,7 +130,6 @@ const Solutions = () => {
     >
       {/* Decorative background */}
       <div className="sol-bg" aria-hidden="true">
-        <div className="sol-grid" />
         <div className="sol-glow sol-glow-blue" />
         <div className="sol-glow sol-glow-amber" />
       </div>

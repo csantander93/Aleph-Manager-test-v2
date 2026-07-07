@@ -5,16 +5,6 @@
   pointer-events: none;
 }
 
-.sol-grid {
-  position: absolute;
-  inset: 0;
-  opacity: 0.04;
-  background-image:
-    linear-gradient(#ffffff 1px, transparent 1px),
-    linear-gradient(to right, #ffffff 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
 .sol-glow {
   position: absolute;
   border-radius: 50%;
