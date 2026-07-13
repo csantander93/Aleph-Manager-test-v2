@@ -53,7 +53,6 @@ import naranjax      from '../../assets/img-clients/naranjax.webp';
 import reba          from '../../assets/img-clients/reba.webp';
 import sancorseguros from '../../assets/img-clients/sancorseguros.webp';
 import uala          from '../../assets/img-clients/uala.webp';
-import uilo          from '../../assets/img-clients/uilo.webp';
 import bcocomercio   from '../../assets/img-clients/bcocomercio.webp';
 import mercedes      from '../../assets/img-clients/mercedes.webp';
 import tarjetanaranja from '../../assets/img-clients/tarjetanaranja.webp';
@@ -75,7 +74,6 @@ const ALL_CLIENTS = [
   { img: bcosantacruz,   name: 'Banco Santa Cruz',          country: 'AR' },
   { img: bcosantafe,     name: 'Banco Santa Fe',            country: 'AR' },
   { img: brubank,        name: 'Brubank',                   country: 'AR' },
-  { img: uilo,           name: 'Uilo',                      country: 'AR' },
   { img: bcodelsol,      name: 'Banco del Sol',             country: 'AR' },
   { img: naranjax,       name: 'Naranja X',                 country: 'AR' },
   { img: tarjetanaranja, name: 'Tarjeta Naranja',           country: 'AR' },
@@ -106,33 +104,39 @@ const ALL_CLIENTS = [
   { img: balanz,         name: 'Balanz',                    country: 'AR' },
   { img: bcomacro,       name: 'Banco Macro',               country: 'AR' },
   { img: sancorseguros,  name: 'Sancor Seguros',            country: 'AR' },
-  { img: mercedes,       name: 'Mercedes',                  country: 'AR' },
-  { img: redlik,         name: 'Redlink',                   country: 'AR' },
+  { img: mercedes,       name: 'Mercedes-Benz Financiera',  country: 'AR' },
+  { img: redlik,         name: 'Link',                      country: 'AR' },
   { img: GPAT,           name: 'GPAT',                      country: 'AR' },
-  { img: NAVE,           name: 'NAVE',                      country: 'AR' },
-  // Internacionales
-  { img: uala,           name: 'Ualá México',               country: 'MX' },
-  { img: montemar,       name: 'Montemar',                  country: 'NI' },
-  { img: bcocomercio,    name: 'Banco Comercio',            country: 'NI' },
-  { img: bcosucredito,   name: 'Sucrédito',                 country: 'CO' },
-  { img: mercantil,      name: 'Banco Mercantil',           country: 'CO' },
-  { img: creditoregional,name: 'Crédito Regional',          country: 'CR' },
+  { img: NAVE,           name: 'Nave',                      country: 'AR' },
+  { img: montemar,       name: 'Montemar',                  country: 'AR' },
+  { img: bcocomercio,    name: 'Banco de Comercio',         country: 'AR' },
+  { img: bcosucredito,   name: 'Supercrédito',              country: 'AR' },
+  { img: creditoregional,name: 'Crédito Regional',          country: 'AR' },
+  { img: interbank,      name: 'Interbanking',              country: 'AR' },
+  // Multipaís
+  { img: uala,           name: 'Ualá',                      country: ['AR', 'CO', 'MX'] },
+  { img: bcoficohsa,     name: 'Ficohsa',                   country: ['HN', 'NI'] },
+  // Costa Rica
   { img: coopeande,      name: 'Coopeande',                 country: 'CR' },
-  { img: bcoficohsa,     name: 'Ficohsa Honduras',          country: 'HN' },
-  { img: interbank,      name: 'Interbank',                 country: 'PA' },
-  { img: cajadeahorrospa,name: 'Caja de Ahorros Panamá',   country: 'PA' },
+  // Panamá
+  { img: mercantil,      name: 'Banco Mercantil',           country: 'PA' },
+  { img: cajadeahorrospa,name: 'Caja de Ahorros',           country: ['AR', 'PA'] },
 ];
 
-const AR_COUNT  = ALL_CLIENTS.filter(c => c.country === 'AR').length;
-const INTL_COUNT = ALL_CLIENTS.filter(c => c.country !== 'AR').length;
+const countriesOf = (c) => (Array.isArray(c.country) ? c.country : [c.country]);
 
-const ROWS = [
-  ALL_CLIENTS.slice(0,  12),
-  ALL_CLIENTS.slice(12, 24),
-  ALL_CLIENTS.slice(24, 36),
-  ALL_CLIENTS.slice(36, 48),
-  ALL_CLIENTS.slice(48),
-];
+const TOTAL_CLIENTS = ALL_CLIENTS.length;
+const TOTAL_COUNTRIES = [...new Set(ALL_CLIENTS.flatMap(countriesOf))].length;
+
+// Reparto balanceado: cada fila queda con (casi) la misma cantidad de clientes,
+// evitando filas cortas cuyo bloque sería más angosto que el viewport y dejaría
+// ver el mismo logo repetido al entrar/salir por el otro extremo.
+const ROW_COUNT = 5;
+const ROWS = Array.from({ length: ROW_COUNT }, (_, i) => {
+  const start = Math.floor((i * TOTAL_CLIENTS) / ROW_COUNT);
+  const end = Math.floor(((i + 1) * TOTAL_CLIENTS) / ROW_COUNT);
+  return ALL_CLIENTS.slice(start, end);
+});
 const DIRS = ['l', 'r', 'l', 'r', 'l'];
 const DURS = ['55s', '62s', '50s', '67s', '58s'];
 
@@ -150,7 +154,7 @@ const COUNTRIES = [
 // ── Subcomponents ─────────────────────────────────────────────────────────────
 
 const LogoItem = ({ client, hoveredCountry }) => {
-  const isHighlighted = !!hoveredCountry && client.country === hoveredCountry;
+  const isHighlighted = !!hoveredCountry && countriesOf(client).includes(hoveredCountry);
   const isLargeCountry = hoveredCountry === 'AR';
   const fullEffect = isHighlighted && !isLargeCountry;
   const dim = !!hoveredCountry && !isHighlighted;
@@ -197,15 +201,11 @@ const Clients = () => {
           </p>
           <div className="clients-stats reveal" style={{ '--reveal-delay': '240ms' }}>
             <div className="s">
-              <div className="v">{AR_COUNT}</div>
-              <div className="l">{isES ? 'Clientes Argentina' : 'Argentina clients'}</div>
+              <div className="v">{TOTAL_CLIENTS}</div>
+              <div className="l">{isES ? 'Clientes' : 'Clients'}</div>
             </div>
             <div className="s">
-              <div className="v">{INTL_COUNT}</div>
-              <div className="l">{isES ? 'Clientes internacionales' : 'International clients'}</div>
-            </div>
-            <div className="s">
-              <div className="v">7</div>
+              <div className="v">{TOTAL_COUNTRIES}</div>
               <div className="l">{isES ? 'Países' : 'Countries'}</div>
             </div>
           </div>

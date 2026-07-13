@@ -2,7 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(npm run *)",
-      "Bash(dir /B)"
+      "Bash(dir /B)",
+      "Bash(npm audit *)",
+      "PowerShell(Resolve-DnsName *)",
+      "Skill(run)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":5174 :5173\")",
+      "Bash(powershell *)",
+      "Bash(findstr \":5174\")"
     ]
   }
 }

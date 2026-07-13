@@ -25,9 +25,9 @@ const Intro = () => {
   }, []);
 
   const goTo = (sel) => {
-    const el = document.querySelector(sel);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 64;
+    const section = document.querySelector(sel);
+    if (section) {
+      const top = section.getBoundingClientRect().top + window.pageYOffset - 68;
       window.scrollTo({ top, behavior: 'smooth' });
     }
   };
@@ -39,12 +39,7 @@ const Intro = () => {
       <div className="orb orb-3" />
 
       <div className="container hero-inner">
-        <div className="hero-eyebrow-row reveal">
-          <span className="badge">v 4.3 · 2026</span>
-          <span className="meta">{isES ? 'Plataforma GRC para Banca y Finanzas' : 'GRC platform for Banking & Finance'}</span>
-        </div>
-
-        <h1 className="reveal" style={{ '--reveal-delay': '80ms' }}>
+<h1 className="reveal" style={{ '--reveal-delay': '80ms' }}>
           <span className="grey">{isES ? 'Cumplimiento sin' : 'Compliance without'}</span><br />
           <span className="grad">{isES ? 'fricción.' : 'friction.'}</span>
         </h1>
@@ -54,9 +49,6 @@ const Intro = () => {
         </p>
 
         <div className="hero-ctas reveal" style={{ '--reveal-delay': '240ms' }}>
-          <button className="btn btn-primary" onClick={() => goTo('#contacto')}>
-            {t('intro.ctaPrimary')} <span className="arr">→</span>
-          </button>
           <button className="btn btn-ghost" onClick={() => goTo('#soluciones')}>
             {t('intro.ctaSecondary')}
           </button>

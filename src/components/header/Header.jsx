@@ -36,9 +36,9 @@ const Header = () => {
   const onNav = (e, href) => {
     e.preventDefault();
     setOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 64;
+    const section = document.querySelector(href);
+    if (section) {
+      const top = section.getBoundingClientRect().top + window.pageYOffset - 68;
       window.scrollTo({ top, behavior: 'smooth' });
     }
   };
@@ -78,12 +78,30 @@ const Header = () => {
         </nav>
 
         <div className="header-right">
-          <button className="lang-toggle" onClick={changeLanguage} aria-label={isES ? 'Switch to English' : 'Cambiar a Español'}>
-            {isES ? 'EN' : 'ES'}
-          </button>
           <a href="#contacto" className="btn btn-primary header-cta" onClick={(e) => onNav(e, '#contacto')}>
             {t('intro.ctaPrimary')} <span className="arr">→</span>
           </a>
+          <button className="lang-switch" onClick={changeLanguage} aria-label={isES ? 'Switch to English' : 'Cambiar a Español'}>
+            <svg className={`lang-flag${isES ? ' active' : ''}`} viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
+              <rect width="20" height="14" fill="#c60b1e"/>
+              <rect y="3.5" width="20" height="7" fill="#ffc400"/>
+            </svg>
+            <span className={`lang-track${isES ? '' : ' lang-track--en'}`}>
+              <span className="lang-thumb" />
+            </span>
+            <svg className={`lang-flag${isES ? '' : ' active'}`} viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg">
+              <rect width="20" height="14" fill="#B22234"/>
+              <rect y="1.08" width="20" height="1.54" fill="#fff"/>
+              <rect y="3.08" width="20" height="1.54" fill="#B22234"/>
+              <rect y="4.62" width="20" height="1.54" fill="#fff"/>
+              <rect y="6.15" width="20" height="1.54" fill="#B22234"/>
+              <rect y="7.69" width="20" height="1.54" fill="#fff"/>
+              <rect y="9.23" width="20" height="1.54" fill="#B22234"/>
+              <rect y="10.77" width="20" height="1.54" fill="#fff"/>
+              <rect y="12.31" width="20" height="1.54" fill="#B22234"/>
+              <rect width="8" height="7.69" fill="#3C3B6E"/>
+            </svg>
+          </button>
           <button
             className="mobile-toggle"
             onClick={() => setOpen(!open)}

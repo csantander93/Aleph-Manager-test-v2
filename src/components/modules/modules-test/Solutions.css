@@ -29,14 +29,7 @@
 }
 
 /* ── Eyebrow ─────────────────────────────────────────────── */
-.sol-eyebrow {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  color: #60a5fa;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
+/* .sol-eyebrow replaced by global .eyebrow class */
 
 /* ── Logo card ───────────────────────────────────────────── */
 .sol-logo-card {
@@ -54,7 +47,8 @@
   gap: 10px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.10);
-  color: #cbd5e1;
+  color: var(--fg-2);
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
   padding: 12px 20px;

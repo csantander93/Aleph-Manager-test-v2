@@ -125,7 +125,7 @@ const Solutions = () => {
     <section
       id="soluciones"
       className="solutions"
-      style={{ position: 'relative', padding: '96px 0', background: '#0f172a', overflow: 'hidden' }}
+      style={{ position: 'relative', minHeight: '100svh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 'clamp(56px, 7vw, 80px) 0', background: '#0f172a', overflow: 'hidden' }}
       aria-labelledby="solutions-heading"
     >
       {/* Decorative background */}
@@ -144,20 +144,16 @@ const Solutions = () => {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           style={{ textAlign: 'center', marginBottom: '32px' }}
         >
-          <span className="sol-eyebrow">
+          <span className="eyebrow">
             {lang === 'es' ? 'Nuestra plataforma' : 'Our platform'}
           </span>
           <h2
             id="solutions-heading"
-            style={{ fontWeight: 700, color: '#ffffff', marginTop: '12px', lineHeight: 1.2, fontSize: 'clamp(32px,4vw,48px)', letterSpacing: '-0.02em' }}
+            className="h-section"
+            style={{ marginTop: '12px' }}
           >
             {t('solutions.title')}
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '18px', marginTop: '16px', maxWidth: '42rem', margin: '16px auto 0', lineHeight: 1.6 }}>
-            {lang === 'es'
-              ? 'Solución SaaS modular para la gestión integrada de GRC, PLAFT, continuidad de negocio y compliance regulatorio.'
-              : 'Modular SaaS solution for integrated GRC, AML/CFT, business continuity and regulatory compliance management.'}
-          </p>
         </motion.div>
 
         {/* Logo */}
@@ -172,11 +168,23 @@ const Solutions = () => {
           </div>
         </motion.div>
 
+        {/* Hint */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          style={{ textAlign: 'center', color: 'var(--fg-3)', fontSize: '14px', fontFamily: 'var(--font-body)', marginBottom: '24px' }}
+        >
+          {lang === 'es'
+            ? 'Hacé clic en cualquier módulo para ver sus funcionalidades'
+            : 'Click on any module to see its features'}
+        </motion.p>
+
         {/* Tab buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.25 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
           style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}
           role="tablist"
           aria-label={t('solutions.ariaLabels.tablist')}
@@ -186,7 +194,7 @@ const Solutions = () => {
               key={tab.key}
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.3 + i * 0.05 }}
+              transition={{ duration: 0.4, delay: 0.4 + i * 0.05 }}
               onClick={() => handleTabClick(tab)}
               className="sol-tab-btn"
               role="tab"
@@ -199,18 +207,6 @@ const Solutions = () => {
             </motion.button>
           ))}
         </motion.div>
-
-        {/* Hint */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', marginTop: '32px' }}
-        >
-          {lang === 'es'
-            ? 'Hacé clic en cualquier módulo para ver sus funcionalidades'
-            : 'Click on any module to see its features'}
-        </motion.p>
       </div>
 
       {/* Modules sheet */}
