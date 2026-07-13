@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './Clients.css';
 
@@ -151,6 +151,20 @@ const COUNTRIES = [
   { code: 'PA',  flag: '🇵🇦', label: 'Panamá',     labelEN: 'Panama'     },
 ];
 
+// Clientes agrupados por país (deduplicados por logo dentro de cada país).
+// Usado en la vista estática de mobile, donde el carrousel no es cómodo.
+const CLIENTS_BY_COUNTRY = COUNTRIES.filter((c) => c.code !== 'all').map(
+  ({ code, flag, label, labelEN }) => ({
+    code,
+    flag,
+    label,
+    labelEN,
+    items: ALL_CLIENTS
+      .filter((c) => countriesOf(c).includes(code))
+      .filter((c, i, arr) => arr.findIndex((x) => x.img === c.img) === i),
+  }),
+).filter((g) => g.items.length > 0);
+
 // ── Subcomponents ─────────────────────────────────────────────────────────────
 
 const LogoItem = ({ client, hoveredCountry }) => {
@@ -187,6 +201,15 @@ const Clients = () => {
   const { t, i18n } = useTranslation();
   const isES = i18n.language !== 'en';
   const [hoveredCountry, setHoveredCountry] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 760px)');
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   return (
     <section id="clientes" className="clients">
@@ -211,32 +234,71 @@ const Clients = () => {
           </div>
         </div>
 
-        <div className="cli-rows reveal" style={{ '--reveal-delay': '80ms' }}>
-          {ROWS.map((row, i) => (
-            <MarqueeRow
-              key={i}
-              row={row}
-              dir={DIRS[i]}
-              dur={DURS[i]}
-              hoveredCountry={hoveredCountry}
-            />
-          ))}
-        </div>
+        {isMobile ? (
+          /* ── Mobile: grilla estática agrupada por país ── */
+          <div className="cli-mobile reveal" style={{ '--reveal-delay': '80ms' }}>
+            {CLIENTS_BY_COUNTRY.map(({ code, flag, label, labelEN, items }) => (
+              <div className="cli-mgroup" key={code}>
+                <div className="cli-mhead">
+                  <span className="cli-mflag">{flag}</span>
+                  <h3>{isES ? label : labelEN}</h3>
+                  <span className="cli-mcount">{items.length}</span>
+                  <span className="cli-mline" />
+                </div>
+                <div className="cli-mgrid">
+                  {(() => {
+                    const cols = items.length > 12 ? 4 : 3;
+                    const GAP = 10;
+                    return items.map((c, i) => (
+                      <div
+                        className="cli-mlogo"
+                        key={`${c.name}-${i}`}
+                        style={{ flex: `0 0 calc((100% - ${(cols - 1) * GAP}px) / ${cols})` }}
+                      >
+                        <img
+                          src={c.img}
+                          alt={c.name}
+                          loading="lazy"
+                          onError={(e) => { e.currentTarget.closest('.cli-mlogo').style.display = 'none'; }}
+                        />
+                      </div>
+                    ));
+                  })()}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* ── Desktop: filas de marquee (reparto balanceado) ── */}
+            <div className="cli-rows reveal" style={{ '--reveal-delay': '80ms' }}>
+              {ROWS.map((row, i) => (
+                <MarqueeRow
+                  key={i}
+                  row={row}
+                  dir={DIRS[i]}
+                  dur={DURS[i]}
+                  hoveredCountry={hoveredCountry}
+                />
+              ))}
+            </div>
 
-        <div className="cli-countries reveal" style={{ '--reveal-delay': '120ms' }}>
-          {COUNTRIES.map(({ code, flag, label, labelEN }) => (
-            <span
-              key={code}
-              className={`cli-country${hoveredCountry === code || (code === 'all' && !hoveredCountry) ? ' active' : ''}`}
-              onMouseEnter={() => setHoveredCountry(code === 'all' ? null : code)}
-              onMouseLeave={() => setHoveredCountry(null)}
-            >
-              <span>{flag}</span>
-              {isES ? label : labelEN}
-              {code !== 'all' && <span className="ct">{code}</span>}
-            </span>
-          ))}
-        </div>
+            <div className="cli-countries reveal" style={{ '--reveal-delay': '120ms' }}>
+              {COUNTRIES.map(({ code, flag, label, labelEN }) => (
+                <span
+                  key={code}
+                  className={`cli-country${hoveredCountry === code || (code === 'all' && !hoveredCountry) ? ' active' : ''}`}
+                  onMouseEnter={() => setHoveredCountry(code === 'all' ? null : code)}
+                  onMouseLeave={() => setHoveredCountry(null)}
+                >
+                  <span>{flag}</span>
+                  {isES ? label : labelEN}
+                  {code !== 'all' && <span className="ct">{code}</span>}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -9,7 +9,9 @@
       "Bash(netstat -ano)",
       "Bash(findstr \":5174 :5173\")",
       "Bash(powershell *)",
-      "Bash(findstr \":5174\")"
+      "Bash(findstr \":5174\")",
+      "Bash(npx eslint *)",
+      "Bash(npx vite *)"
     ]
   }
 }
